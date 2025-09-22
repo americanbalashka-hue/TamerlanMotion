@@ -6,12 +6,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Загрузить файлы для клиента</h1>
+  <div class="container">
+    <h1>Загрузить файлы для клиента</h1>
 
-  <input type="file" id="photo" accept="image/*">
-  <input type="file" id="video" accept="video/*">
-  <input type="file" id="mind" accept=".mind">
-  <button id="uploadBtn">Загрузить</button>
+    <label class="file-label">
+      Фото
+      <input type="file" id="photo" accept="image/*">
+    </label>
+
+    <label class="file-label">
+      Видео
+      <input type="file" id="video" accept="video/*">
+    </label>
+
+    <label class="file-label">
+      .mind файл
+      <input type="file" id="mind" accept=".mind">
+    </label>
+
+    <button id="uploadBtn">Загрузить</button>
+  </div>
 
   <script type="module" src="upload.js"></script>
 </body>
