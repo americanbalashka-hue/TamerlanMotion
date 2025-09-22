@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>AR Фото</title>
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mindar/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<body>
+  <a-scene mindar-image="imageTargetSrc: ./targets.mind">
+    <a-assets>
+      <video id="video" src="" preload="auto" crossorigin="anonymous"></video>
+    </a-assets>
+
+    <a-entity mindar-image-target="targetIndex: 0">
+      <a-video src="#video" width="1" height="0.6" position="0 0.3 0"></a-video>
+    </a-entity>
+
+    <a-camera></a-camera>
+  </a-scene>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const clientId = urlParams.get('id');
+
+    fetch(`https://macmkxamifmwnfndzqey.supabase.co/rest/v1/clients?clientId=eq.${clientId}`, {
+      headers: {
+        apikey: 'sb_publishable_ctFkza51tkKuXenyk6d0Qw_OY1r0M-y',
+        Authorization: 'Bearer sb_publishable_ctFkza51tkKuXenyk6d0Qw_OY1r0M-y'
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.querySelector('#video').src = `https://macmkxamifmwnfndzqey.supabase.co/storage/v1/object/public/${data[0].videoUrl}`;
+    });
+  </script>
+</body>
+</html>
