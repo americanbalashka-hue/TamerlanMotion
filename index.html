@@ -4,29 +4,25 @@
   <meta charset="UTF-8">
   <title>AR Фото-система</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
-  <h1>Загрузить файлы клиента</h1>
+  <h1>Загрузить файлы для клиента</h1>
 
   <label>Фото:</label>
   <input type="file" id="photo" accept="image/*"><br>
-  <div id="photoPreview"></div><br>
 
   <label>Видео:</label>
   <input type="file" id="video" accept="video/*"><br>
-  <div id="videoPreview"></div><br>
 
   <label>.mind файл:</label>
-  <input type="file" id="mind" accept=".mind"><br>
-  <div id="mindPreview"></div><br>
+  <input type="file" id="mind" accept=".mind"><br><br>
 
   <button id="uploadBtn">Загрузить</button>
 
-  <div id="result"></div>
+  <div id="output" style="margin-top:20px;"></div>
+  <div id="qrcode" style="margin-top:20px;"></div>
 
-  <!-- Библиотеки -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script type="module" src="./upload.js"></script>
+  <script type="module" src="upload.js"></script>
 </body>
 </html>
