@@ -1,13 +1,12 @@
 {
   "name": "ar-photo-system",
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "start": "serve ."
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.0.0",
+    "serve": "^14.2.0",
     "qrcode": "^1.5.1",
-    "@napi-rs/canvas": "^0.1.29"
+    "@supabase/supabase-js": "^2.34.0"
   }
 }
