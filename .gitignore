@@ -1,0 +1,9 @@
+# Node.js dependencies
+node_modules/
+
+# Логи
+*.log
+
+# Сборки или временные файлы
+dist/
+build/
