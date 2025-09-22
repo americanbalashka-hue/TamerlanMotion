@@ -1,71 +1,47 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+import QRCode from 'https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js';
 
-const supabaseUrl = 'https://macmkxamifmwnfndzqey.supabase.co';
-const supabaseKey = 'sb_publishable_ctFkza51tkKuXenyk6d0Qw_OY1r0M-y';
+const supabaseUrl = 'https://macmkxamifmwnfndzqey.supabase.co'; // твой Supabase URL
+const supabaseKey = 'sb_publishable_ctFkza51tkKuXenyk6d0Qw_OY1r0M-y'; // твой anon key
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const output = document.getElementById('output');
-const qrcodeDiv = document.getElementById('qrcode');
+const photoInput = document.getElementById('photo');
+const videoInput = document.getElementById('video');
+const mindInput = document.getElementById('mind');
+const uploadBtn = document.getElementById('uploadBtn');
+const resultDiv = document.createElement('div');
+document.body.appendChild(resultDiv);
 
-async function uploadFile(file) {
-  if (!file) return null;
+uploadBtn.addEventListener('click', async () => {
+  resultDiv.innerHTML = ''; // очищаем результат
+  const files = [
+    { file: photoInput.files[0], type: 'photo' },
+    { file: videoInput.files[0], type: 'video' },
+    { file: mindInput.files[0], type: 'mind' }
+  ];
 
-  const fileName = `${Date.now()}_${file.name}`;
+  for (let f of files) {
+    if (!f.file) continue;
 
-  try {
+    const fileName = `${Date.now()}_${f.file.name}`;
     const { data, error } = await supabase
       .storage
-      .from('clients')  // имя bucket в Supabase
-      .upload(fileName, file);
+      .from('clients') // bucket
+      .upload(fileName, f.file, { upsert: true });
 
     if (error) {
-      output.innerHTML += `<p style="color:red">Ошибка при загрузке ${file.name}: ${error.message}</p>`;
-      return null;
+      resultDiv.innerHTML += `<p style="color:red">Ошибка загрузки ${f.type}: ${error.message}</p>`;
+      console.error(error);
+    } else {
+      const fileUrl = supabase.storage.from('clients').getPublicUrl(fileName).data.publicUrl;
+      resultDiv.innerHTML += `<p style="color:green">${f.type} загружен: <a href="${fileUrl}" target="_blank">Открыть</a></p>`;
+
+      // Генерация QR-кода для файла
+      const qrCanvas = document.createElement('canvas');
+      resultDiv.appendChild(qrCanvas);
+      QRCode.toCanvas(qrCanvas, fileUrl, { width: 100 }, function (err) {
+        if (err) console.error(err);
+      });
     }
-
-    output.innerHTML += `<p style="color:green">Файл ${file.name} загружен ✅</p>`;
-    return fileName;
-  } catch (err) {
-    output.innerHTML += `<p style="color:red">Ошибка с ${file.name}: ${err.message}</p>`;
-    return null;
   }
-}
-
-function generateLink(clientId) {
-  return `${window.location.origin}/ar.html?id=${clientId}`;
-}
-
-async function generateQRCode(link) {
-  qrcodeDiv.innerHTML = '';
-  try {
-    const canvas = document.createElement('canvas');
-    await QRCode.toCanvas(canvas, link);
-    qrcodeDiv.appendChild(canvas);
-    output.innerHTML += `<p>Ссылка на AR-страницу: <a href="${link}" target="_blank">${link}</a></p>`;
-  } catch (err) {
-    output.innerHTML += `<p style="color:red">Ошибка генерации QR: ${err.message}</p>`;
-  }
-}
-
-document.getElementById('uploadBtn').addEventListener('click', async () => {
-  output.innerHTML = '';
-  qrcodeDiv.innerHTML = '';
-
-  const photo = document.getElementById('photo').files[0];
-  const video = document.getElementById('video').files[0];
-  const mind = document.getElementById('mind').files[0];
-
-  if (!photo && !video && !mind) {
-    output.innerHTML = '<p style="color:red">Выберите хотя бы один файл!</p>';
-    return;
-  }
-
-  const clientId = Date.now(); // уникальный id для клиента
-
-  await uploadFile(photo);
-  await uploadFile(video);
-  await uploadFile(mind);
-
-  const link = generateLink(clientId);
-  await generateQRCode(link);
 });
