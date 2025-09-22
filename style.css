@@ -1,0 +1,56 @@
+/* Общий стиль */
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f0f2f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Контейнер */
+.container {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 320px;
+}
+
+/* Заголовок */
+.container h1 {
+  font-size: 22px;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Кнопки выбора файлов */
+.file-label {
+  display: block;
+  margin-bottom: 20px;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+}
+
+.file-label input {
+  display: none;
+}
+
+/* Стиль кнопки Загрузить */
+button#uploadBtn {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button#uploadBtn:hover {
+  background: #357ab8;
+}
